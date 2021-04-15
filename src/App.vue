@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Header title="Task list:" />
-    <Tasks :tasks="tasks" />
+    <Tasks @toggle-reminder="toggleReminder" @delete-task='deleteTask' :tasks="tasks" />
   </div>
 </template>
 
@@ -20,6 +20,21 @@ export default {
       tasks: []
     }
   },
+  methods: {
+    deleteTask(id) {
+      if(confirm('Are you sure?')){
+        this.tasks = this.tasks.filter((task) => task.id !== id)
+      }
+    },
+    toggleReminder(id) {
+      // forEach task if the task.id is equal to the id is passed
+      // In return it shows an array of objects where we want to change
+      // the reminder to the opposite value
+      this.tasks = this.tasks.map((task) => task.id === id ? {
+        ...task, reminder: !task.reminder } : task // if it doesn't math we don't return anything
+      )
+    },
+  },
   created(){
     this.tasks = [
       {
@@ -32,7 +47,7 @@ export default {
         id: 2,
         text: 'Doctor Appointment',
         day: '05/05/2021',
-        reminder: true
+        reminder: false
       }
     ]
   }
